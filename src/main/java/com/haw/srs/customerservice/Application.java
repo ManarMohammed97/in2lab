@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-
+// test
 @SpringBootApplication
 public class Application {
 
@@ -24,12 +24,16 @@ class PopulateTestDataRunner implements CommandLineRunner {
     private final CustomerRepository customerRepository;
 
     @Autowired
+    private MovieService movieService;
+
+    @Autowired
     public PopulateTestDataRunner(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
     @Override
     public void run(String... args) {
+
         customerRepository.deleteAll();
 
         Arrays.asList(
@@ -39,7 +43,12 @@ class PopulateTestDataRunner implements CommandLineRunner {
                 );
 
         Customer customer = new Customer("Stefan", "Sarstedt", Gender.MALE, "stefan.sarstedt@haw-hamburg.de", new PhoneNumber("+49-40-123456"));
-        Reservation reservation = new Reservation("James Bond 007");
+
+        Movie movie1 = new Movie("Fast ", 140);
+
+        movieService.saveMovie(movie1);
+        Reservation reservation = new Reservation(movie1, 1,1);
+
         customer.addReservation(reservation);
         customerRepository.save(customer);
     }

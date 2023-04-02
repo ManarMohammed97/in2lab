@@ -1,5 +1,6 @@
 package com.haw.srs.customerservice;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,8 @@ class CustomerRepositoryCustomTest {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private MovieService movieService;
 
     @BeforeEach
     void setUp() {
@@ -28,17 +31,23 @@ class CustomerRepositoryCustomTest {
     @Test
     void getAllCustomersSuccess() {
 
+
         Customer customer = new Customer("Stefan", "Sarstedt", Gender.MALE,
                 "stefan.sarstedt@haw-hamburg.de",null);
         customerRepository.save(customer);
         customer = customerRepository.save(new Customer("Jane", "Doe", Gender.FEMALE,
                 "jane.doe@mail.com",null));
-        Reservation reservation = new Reservation("James Bond 007");
+        Movie movie = new Movie("Scarface", 129);
+        movieService.saveMovie(movie);
+
+        Reservation reservation = new Reservation(movie, 2, 6);
         customer.addReservation(reservation);
         customerRepository.save(customer);
 
         assertThat(customerRepository.count()).isEqualTo(2);
         List<Customer> actual = customerRepository.findCustomersWithoutReservations();
         assertThat(actual).size().isEqualTo(1);
+
+
     }
 }

@@ -24,10 +24,12 @@ class JPAExceptionTest {
     @Test
     @Transactional
     void getAllCustomersSuccess() {
+        Movie movie1 = new Movie("James Bond 007", 200);
+
 
         Customer customer = new Customer("Jane", "Doe", Gender.FEMALE,
                 "jane.doe@mail.com",null);
-        Reservation reservation = new Reservation("James Bond 007");
+        Reservation reservation = new Reservation(movie1, 1,10);
         customer.addReservation(reservation);
         
         entityManager.persist(customer);
